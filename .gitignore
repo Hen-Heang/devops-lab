@@ -1,1 +1,50 @@
+# Operating system
 .DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Java
+*.class
+target/
+build/
+.gradle/
+
+# Node.js
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+# Logs
+*.log
+logs/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
+
+# Kubernetes/local clusters
+.kube/
+
+# Temporary files
+*.tmp
+*.swp
