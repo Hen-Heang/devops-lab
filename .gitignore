@@ -11,10 +11,13 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+.envrc
 *.pem
 *.key
 *.p12
 *.pfx
+*.jks
+*.keystore
 
 # Java
 *.class
@@ -32,6 +35,7 @@ coverage/
 # Logs
 *.log
 logs/
+!elasticsearch/sample-logs/demo-api.log
 
 # Terraform
 .terraform/
@@ -48,3 +52,6 @@ crash.*.log
 # Temporary files
 *.tmp
 *.swp
+
+# Local lab output
+labs/00-foundations/devops-practice/

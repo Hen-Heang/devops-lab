@@ -1,60 +1,102 @@
 # Daily DevOps Note
 
-**Date:** YYYY-MM-DD  
-**Topic:**  
-**Study time:**  
+- **Date:** YYYY-MM-DD
+- **Topic:**
+- **Roadmap stage:**
+- **Study time:**
+- **Shell used:** PowerShell / WSL Bash / other
+- **Environment:** local / container / CI / server
 
 ## Goal
 
-What should I be able to do after this session?
+What should I be able to explain or demonstrate after this session?
 
-## What I learned
+## What, why, and when
 
-Explain the concepts in simple words.
+### What is it?
+
+Define the concept in simple words.
+
+### Why does it matter?
+
+Name the real development or operations problem it solves.
+
+### When should I use it?
+
+Give one appropriate situation and one situation where it would be unnecessary or premature.
+
+## New vocabulary
+
+| Term | My explanation |
+|---|---|
+| Example | Explain without copying |
 
 ## Commands used
 
-```bash
-# Add commands here
-```
+For every important command, write:
 
-For every important command, explain:
+1. the command;
+2. what you predicted;
+3. the important output;
+4. what the output proved.
 
-- What it does
-- Why it was needed
-- What output you expected
+~~~text
+Command:
+
+Prediction:
+
+Important output:
+
+Conclusion:
+~~~
+
+Remove secrets and sensitive data from recorded output.
 
 ## Practice completed
 
-Describe what you built or tested.
+Describe what you built, changed, or inspected.
 
-## Error -> Cause -> Fix
+## Verification
+
+Do not write only that it worked.
+
+| Check | Expected | Actual | Pass? |
+|---|---|---|---|
+| Example HTTP check | Status 200 | Status ... | Yes / No |
+
+## Error -> Cause -> Fix -> Prevention
 
 ### Error
 
-```text
-Paste the important part of the error here.
-```
+Paste only the relevant, non-sensitive part of the error.
 
 ### Cause
 
-Explain the actual reason.
+Explain the actual reason. Do not repeat the error message as the cause.
 
 ### Fix
 
-Explain the steps that solved it.
+Explain the smallest change that solved the cause.
+
+### Verification after the fix
+
+Record the command or behavior that proved the original problem is solved.
 
 ### Prevention
 
-How can this problem be avoided or detected earlier?
+How can documentation, automation, validation, or monitoring prevent this problem?
 
-## Check myself
+## Safety and security review
 
-- [ ] I can explain the topic without reading the note.
-- [ ] I ran the commands myself.
-- [ ] I understand the output.
-- [ ] I committed the useful result.
+- [ ] I checked the target before cleanup or deletion.
+- [ ] I did not record a password, token, private key, or personal data.
+- [ ] I exposed only the ports needed for the lab.
+- [ ] I know which resources are still running.
+
+## Teach it back
+
+Explain the topic in three to five sentences as if teaching another beginner.
 
 ## Next action
 
-Write one small, specific next task.
+Write one small and specific next task.

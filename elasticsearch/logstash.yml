@@ -1,0 +1,7 @@
+# Logstash exposes its monitoring API only inside the Compose network.
+http.host: 0.0.0.0
+
+# This learning lab does not send Logstash monitoring data to Elasticsearch.
+xpack.monitoring.enabled: false
+
+log.level: info

@@ -1,75 +1,121 @@
-# Lab: <name>
+# Lab Report: Name
+
+- **Date:** YYYY-MM-DD
+- **Roadmap stage:**
+- **Environment:**
+- **Shell:**
 
 ## Objective
 
-What real problem does this lab solve?
+What observable result must this lab produce?
+
+## What, why, and when
+
+### What
+
+What technology or practice is being tested?
+
+### Why
+
+Which real application-delivery problem does it solve?
+
+### When
+
+When should a project use it? When would it be unnecessary?
 
 ## Architecture
 
-```text
+~~~text
 Client -> Service -> Dependency
-```
+~~~
+
+Explain every arrow: protocol, hostname, port, and trust boundary.
 
 ## Prerequisites
 
-- Required software
+- Required software and versions
 - Required knowledge
 - Required environment variables
+- Required ports
+- Expected memory or disk use
+
+## Before state
+
+Record relevant state before making changes:
+
+- current directory;
+- Git status;
+- running containers or processes;
+- existing resources that must be preserved.
 
 ## Steps
 
 ### 1. Prepare
 
-Explain the step before showing commands.
+Explain the action before the command.
 
-```bash
-# commands
-```
+~~~text
+Add command here
+~~~
 
 ### 2. Run
 
-```bash
-# commands
-```
+~~~text
+Add command here
+~~~
 
 ### 3. Verify
 
-```bash
-# verification commands
-```
+| Verification | Expected result | Actual result | Pass? |
+|---|---|---|---|
+| Example | Example expectation | Observed evidence | Yes / No |
 
-Expected result:
+A successful command exit is not always enough. Verify the useful application behavior.
 
-```text
-Describe the expected output or behavior.
-```
+## Failure experiment
 
-## Troubleshooting
+Break one safe and reversible condition.
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Example | Example cause | Example fix |
+| Item | Details |
+|---|---|
+| Error | Exact relevant message |
+| Cause | Why it happened |
+| Evidence | Logs, state, port, response, or configuration |
+| Fix | Smallest corrective change |
+| Prevention | Documentation, automation, or alert |
 
 ## Security check
 
-- [ ] No credentials are committed.
+- [ ] No credentials are committed or printed.
 - [ ] Only required ports are exposed.
-- [ ] Images use explicit version tags.
-- [ ] Sensitive values come from environment variables or secret storage.
+- [ ] Images use reviewed version tags or digests.
+- [ ] Sensitive values come from approved secret storage.
+- [ ] Persistent data has a deliberate location.
+- [ ] Privileged access is documented and minimized.
 
 ## Cleanup
 
-```bash
-# commands that remove lab resources
-```
+List the exact resources before removing them.
 
-## What I learned
+~~~text
+Add inspection command here
+Add cleanup command here
+Add cleanup verification here
+~~~
 
-Write the explanation in your own words.
+## Rollback
+
+If this were a deployment, how would you return to the previous known-good state?
 
 ## Completion evidence
 
-- [ ] Commands work from a clean environment.
-- [ ] Verification passed.
+- [ ] Commands work from a documented starting environment.
+- [ ] Functional verification passed.
+- [ ] The failure experiment was diagnosed.
 - [ ] Cleanup was tested.
 - [ ] Important errors were documented.
+- [ ] Remaining limitations are honest and explicit.
+
+## What I learned
+
+Explain the result in your own words without copying the lab instructions.

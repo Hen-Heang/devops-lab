@@ -1,61 +1,56 @@
-version: '3.8'
-services:
-# Elasticsearch service  
-    es-node-01:
-        container_name: es-node-01
-        ports:
-            - '9200:9200'
-            - '9300:9300'
-        environment:
-            - discovery.type=single-node
-        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.17.0'
-        networks:
-            - elastic
-# Kibana service              
-    kibana-01:
-        container_name: kibana-01
-        ports:
-            - '5601:5601'
-        environment:
-            - 'ELASTICSEARCH_HOSTS=http://es-node-01:9200'   
-        image: 'docker.elastic.co/kibana/kibana:7.17.0'   
-        healthcheck:
-            test: ["CMD", "curl", "-f", "kibana-01:5601"]
-            interval: 50s
-            timeout: 50s
-            retries: 5
-        depends_on:
-            - es-node-01
-        networks:
-            - elastic 
-# Logstash service 
-    logstash:
-        container_name: logstash-01
-        volumes:
-            - /Users/theara/project/docker compose/es kb/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro 
-            - /Users/theara/project/docker compose/es kb/logstash.yaml:/usr/share/logstash/config/logstash.yml:ro 
-        image: 'docker.elastic.co/logstash/logstash:7.16.3'
-        depends_on:   
-             kibana-01:
-               condition: service_healthy  
-        networks:
-            - elastic 
+name: devops-elastic-lab
 
-# Filebeat service 
-    filebeat:
-        user: root
-        container_name: filebeat-01
-        command: --strict.perms=false
-        volumes:
-            - /Users/theara/project/docker compose/es kb/filebeat.docker.yaml:/usr/share/filebeat/filebeat.yml:ro
-            - /var/lib/docker/containers:/var/lib/docker/containers:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-        image: 'docker.elastic.co/beats/filebeat:7.16.3' 
-        depends_on:   
-             kibana-01:
-               condition: service_healthy
-        networks:
-            - elastic              
-networks:
-  elastic:
-    name: elastic
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-9.4.2}
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: 'false'
+      xpack.security.enrollment.enabled: 'false'
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    ports:
+      - 127.0.0.1:9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: [CMD-SHELL, 'curl -fsS http://localhost:9200/_cluster/health || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION:-9.4.2}
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 127.0.0.1:5601:5601
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION:-9.4.2}
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-9.4.2}
+    command: [filebeat, -e, --strict.perms=false]
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./sample-logs:/logs:ro
+      - filebeat-data:/usr/share/filebeat/data
+    depends_on:
+      logstash:
+        condition: service_started
+
+volumes:
+  elasticsearch-data:
+  filebeat-data:

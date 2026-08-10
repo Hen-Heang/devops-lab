@@ -16,6 +16,26 @@ Plan -> Build -> Test -> Package -> Deploy -> Observe -> Recover -> Improve
 
 This does not mean you must become a Kubernetes expert or cloud architect immediately. It means you should know enough infrastructure and delivery work to own your application confidently.
 
+## Read this as a beginner
+
+Use three questions for every DevOps practice:
+
+1. What is it?
+2. Why does this application need it?
+3. When should it be used?
+
+For example:
+
+| Question | Docker answer |
+|---|---|
+| What? | A way to build images and run containers |
+| Why? | To package an application with a repeatable runtime |
+| When? | When development, CI, testing, or deployment needs the same application package |
+
+DevOps does not mean using every tool. A small application may need Git, tests, Docker, one server, backups, and monitoring without needing Kubernetes.
+
+Use [BEGINNER-GUIDE.md](BEGINNER-GUIDE.md) for the detailed what, why, when, common mistakes, and readiness checks. Use [ROADMAP.md](../ROADMAP.md) for the practical order.
+
 ## 2. The problem DevOps solves
 
 Without DevOps knowledge, developers often face these problems:
@@ -364,14 +384,14 @@ Suggested milestones:
 3. Containerize one Spring Boot application.
 4. Add PostgreSQL with persistent storage.
 5. Containerize Next.js.
-6. connect all services using Docker Compose.
+6. Connect all services using Docker Compose.
 7. Add automated tests and builds.
-8. deploy to one Linux VM.
-9. configure a domain and HTTPS.
-10. add health checks, logs, and metrics.
-11. practise backup and rollback.
-12. recreate infrastructure with Terraform.
-13. deploy a later version to Kubernetes.
+8. Deploy to one Linux VM.
+9. Configure a domain and HTTPS.
+10. Add health checks, logs, and metrics.
+11. Practise backup and rollback.
+12. Recreate infrastructure with Terraform.
+13. Deploy a later version to Kubernetes.
 
 ## 9. Your responsibility after learning
 

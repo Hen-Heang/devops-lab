@@ -1,0 +1,12 @@
+filebeat.inputs:
+  - type: filestream
+    id: devops-learning-sample
+    enabled: true
+    paths:
+      - /logs/*.log
+
+output.logstash:
+  hosts:
+    - 'logstash:5044'
+
+logging.level: info
