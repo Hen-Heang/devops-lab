@@ -32,6 +32,7 @@ Do not move forward only because you watched a video. Move forward when you can 
 | 6. Observability | 2 weeks | Health, logs, metrics, and an actionable alert exist |
 | 7. Terraform | 1-2 weeks | Disposable infrastructure is created from reviewed code |
 | 8. Kubernetes | 2-3 weeks | The application can roll out and roll back on a local cluster |
+| 9. Extended curriculum (optional) | ongoing | Tools such as Ansible, Helm, Jenkins, GitOps, service mesh, and Rancher are learned when a project needs them |
 
 ## Stage 0: prepare the environment
 
@@ -83,6 +84,7 @@ Use these skills in WSL, containers, CI runners, remote Linux servers, and incid
 - Read permissions and identify users.
 - Find running processes and listening ports.
 - Inspect HTTP status, headers, and body.
+- Write a small, non-destructive shell script that checks an application URL and exits non-zero when the check fails.
 - Practise Git branch, diff, log, restore, and pull-request concepts.
 
 ### Exit gate
@@ -91,6 +93,7 @@ Use these skills in WSL, containers, CI runners, remote Linux servers, and incid
 - [ ] I can read a log and identify its relevant time.
 - [ ] I can explain chmod 640 and chmod 755.
 - [ ] I can explain browser -> DNS -> server -> application.
+- [ ] I can explain and safely rerun every line of my health-check script.
 - [ ] I can restore a tracked file from Git history without discarding unrelated work.
 
 ## Stage 2: Docker fundamentals
@@ -115,6 +118,8 @@ Use Docker in local development, integration tests, CI, and container-based depl
 4. Containerize one Next.js production build.
 5. Run PostgreSQL with a named volume.
 6. Rebuild one image using a multi-stage Dockerfile.
+
+Keep the [Docker CLI reference](docs/DOCKER-CLI-REFERENCE.md) open while you work through the commands.
 
 ### Exit gate
 
@@ -354,6 +359,20 @@ Take one real Spring Boot and Next.js application through the complete lifecycle
 - [ ] later Kubernetes deployment;
 - [ ] architecture diagram and operational runbook.
 
+## Stage 9: extended platform tools (optional)
+
+### What
+
+Additional tools from the provided advanced-course curriculum: Ansible, Docker Swarm, Kubespray-provisioned clusters, advanced RBAC, service mesh with Istio and Kiali, Helm, Jenkins, GitOps with Argo CD, Rancher, self-hosted GitLab, and specialized testing tools.
+
+### Why
+
+These tools solve real problems, but each creates another system to configure, secure, upgrade, observe, and recover. Learn the underlying operation first, then add the tool when a project, workplace, or scale requirement justifies it.
+
+### When
+
+Normally start this stage after the [Final capstone](#final-capstone). If your workplace already uses one of these tools, learn that tool earlier alongside its prerequisite stage. See the [advanced curriculum map](docs/ADVANCED-CURRICULUM-MAP.md) for the full 17-session and self-learning crosswalk.
+
 ## Topics to postpone
 
 These are useful, but they create distraction before the fundamentals:
@@ -365,6 +384,8 @@ These are useful, but they create distraction before the fundamentals:
 - complex microservices;
 - GitOps platforms;
 - certification study without practical labs.
+
+See [docs/ADVANCED-CURRICULUM-MAP.md](docs/ADVANCED-CURRICULUM-MAP.md) for a fuller list mapped against a wider DevOps engineering syllabus.
 
 ## Progress rule
 

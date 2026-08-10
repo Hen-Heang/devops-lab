@@ -18,6 +18,8 @@ Follow this order. Do not begin with Elasticsearch or Kubernetes.
 
 The existing [Elastic Stack lab](elasticsearch/README.md) belongs to the observability stage. It is intentionally not a starting exercise.
 
+Two reference pages connect outside course material to this roadmap: the [Docker CLI reference](docs/DOCKER-CLI-REFERENCE.md) combines safe command lookup with the linked extended Docker tutorial, while the [advanced curriculum map](docs/ADVANCED-CURRICULUM-MAP.md) maps the provided 24-topic course PDF onto the core stages and optional post-capstone tools.
+
 ## What is DevOps?
 
 DevOps is a way of delivering and operating software reliably. It combines:
@@ -97,7 +99,9 @@ devops-learning/
 |-- docs/
 |   |-- BEGINNER-GUIDE.md             # What, why, and when for every major topic
 |   |-- WINDOWS-SETUP.md              # Windows, WSL 2, Git, and Docker setup
-|   +-- WHY-DEVOPS-FOR-FULLSTACK-JAVA.md
+|   |-- WHY-DEVOPS-FOR-FULLSTACK-JAVA.md
+|   |-- DOCKER-CLI-REFERENCE.md       # Docker command and Dockerfile lookup table
+|   +-- ADVANCED-CURRICULUM-MAP.md    # How a wider DevOps syllabus maps onto this roadmap
 |-- labs/
 |   |-- 00-foundations/               # Shell, environment, process, port, and HTTP basics
 |   |-- 01-docker-basics/             # Run and manage an existing image
@@ -147,6 +151,7 @@ These checkboxes describe material present in the repository. They do not mark y
 - [x] Stage 1 foundation lab
 - [x] Stage 2 Docker run lab
 - [x] Stage 2 Docker build lab
+- [x] Docker CLI reference
 - [ ] Stage 3 full-stack Docker Compose lab
 - [ ] Stage 4 GitHub Actions CI
 - [ ] Stage 5 Linux VM deployment with Nginx and HTTPS
@@ -155,6 +160,7 @@ These checkboxes describe material present in the repository. They do not mark y
 - [ ] Runtime verification of the Elastic Stack on a Docker host
 - [ ] Stage 7 Terraform
 - [ ] Stage 8 Kubernetes
+- [x] Stage 9 advanced curriculum map (optional, post-capstone)
 
 ## Definition of success
 
