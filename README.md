@@ -20,6 +20,8 @@ The existing [Elastic Stack lab](elasticsearch/README.md) belongs to the observa
 
 Two reference pages connect outside course material to this roadmap: the [Docker CLI reference](docs/DOCKER-CLI-REFERENCE.md) combines safe command lookup with the linked extended Docker tutorial, while the [advanced curriculum map](docs/ADVANCED-CURRICULUM-MAP.md) maps the provided 24-topic course PDF onto the core stages and optional post-capstone tools.
 
+The [TFDevs course session list](lessons/COURSE.md) follows your supplied class schedule. The [prepared lesson index](lessons/README.md) now covers Git fundamentals, branching and review, Docker fundamentals, image building, Compose, CI/CD introduction, CI workflows, registry publishing, VPS/SSH, production Compose, domains/HTTPS, automated deployment, and Prometheus/Grafana in course order. Each guide includes simple explanations, practice, checks, and source corrections. The Compose lesson includes a local Nginx/API/PostgreSQL/Redis example.
+
 ## What is DevOps?
 
 DevOps is a way of delivering and operating software reliably. It combines:
@@ -54,6 +56,8 @@ DevOps is not one tool. Docker, GitHub Actions, Nginx, Terraform, and Kubernetes
 | Kubernetes | A platform for operating many containers | To manage replicas, rollouts, recovery, and service discovery | After Docker, Compose, CI/CD, and one VM deployment are comfortable |
 
 ## How to study each topic
+
+For new class or course material, use [lessons/](lessons/README.md). Send your lesson text, file, screenshots, or link, and it can be organized into a beginner-friendly explanation with examples, practice, and review questions using the [lesson template](templates/lesson.md).
 
 Use the same seven-step loop for every lesson:
 
@@ -107,6 +111,8 @@ devops-learning/
 |   |-- 01-docker-basics/             # Run and manage an existing image
 |   +-- 02-build-nginx-image/          # Build your first image
 |-- notes/                             # Your completed learning evidence
+|-- lessons/                           # Course lessons explained with examples and practice
+|-- homework/                          # Assigned questions and your answers
 |-- templates/                         # Reusable note and lab-report templates
 +-- elasticsearch/                     # Advanced local observability lab
 ~~~
@@ -152,10 +158,14 @@ These checkboxes describe material present in the repository. They do not mark y
 - [x] Stage 2 Docker run lab
 - [x] Stage 2 Docker build lab
 - [x] Docker CLI reference
-- [ ] Stage 3 full-stack Docker Compose lab
-- [ ] Stage 4 GitHub Actions CI
-- [ ] Stage 5 Linux VM deployment with Nginx and HTTPS
-- [ ] Stage 6 core observability lab
+- [x] Stage 3 introductory Node.js Compose example and guide
+- [ ] Stage 3 Spring Boot + Next.js Docker Compose lab
+- [x] Stage 4 CI starter and single-job / multi-job workflow templates
+- [ ] Hosted GitHub Actions execution and branch-protection verification
+- [x] Stage 5 deployment guides, workflows, proxy configuration, and runbook
+- [ ] Live VPS, registry publishing, DNS and HTTPS verification
+- [x] Stage 6 Prometheus/Grafana example, API metrics, dashboard and alert rules
+- [ ] Docker runtime and notification-delivery verification
 - [x] Optional advanced Elastic Stack configuration and guide
 - [ ] Runtime verification of the Elastic Stack on a Docker host
 - [ ] Stage 7 Terraform

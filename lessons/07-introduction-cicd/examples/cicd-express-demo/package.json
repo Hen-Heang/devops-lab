@@ -1,0 +1,27 @@
+{
+  "name": "cicd-express-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "coverage": "npm test -- --coverage"
+  },
+  "dependencies": {
+    "express": "5.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "cross-env": "10.1.0",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "16.5.0",
+    "jest": "30.5.2",
+    "prettier": "3.6.2",
+    "supertest": "7.1.4"
+  }
+}

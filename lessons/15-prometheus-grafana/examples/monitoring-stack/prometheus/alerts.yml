@@ -1,0 +1,29 @@
+groups:
+  - name: learning-app
+    rules:
+      - alert: AppScrapeUnavailable
+        expr: up{job="app"} == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus cannot scrape the app metrics listener"
+      - alert: AppTargetMissing
+        expr: absent(up{job="app"})
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "The expected app scrape target is missing"
+      - alert: AppHighErrorRatio
+        expr: |
+          (
+            (sum(rate(http_requests_total{job="app",status=~"5.."}[5m])) or vector(0))
+            / clamp_min(sum(rate(http_requests_total{job="app"}[5m])), 0.001)
+          ) > 0.05
+          and sum(rate(http_requests_total{job="app"}[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "App 5xx ratio above 5% with sufficient traffic"

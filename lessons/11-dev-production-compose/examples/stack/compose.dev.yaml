@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      # Relative to compose.yaml, not to this override file or the shell cwd.
+      context: ../../../07-introduction-cicd/examples/cicd-express-demo
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ../../../07-introduction-cicd/examples/cicd-express-demo/app.js:/app/app.js:ro
+      - ../../../07-introduction-cicd/examples/cicd-express-demo/server.js:/app/server.js:ro
+    command: ["node", "--watch", "server.js"]
+    ports:
+      - "127.0.0.1:3011:3000"
+    restart: "no"
+  frontend:
+    ports:
+      - "127.0.0.1:8088:80"
+    restart: "no"

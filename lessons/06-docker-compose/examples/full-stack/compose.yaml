@@ -1,0 +1,67 @@
+name: devops-lesson-compose
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8086}:80"
+    volumes:
+      - ./web/index.html:/usr/share/nginx/html/index.html:ro
+      - ./web/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./backend
+      target: production
+    ports:
+      - "127.0.0.1:${API_PORT:-3006}:3000"
+    environment:
+      PORT: "3000"
+      NODE_ENV: production
+      PGHOST: db
+      PGPORT: "5432"
+      PGUSER: learner
+      PGPASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}"
+      PGDATABASE: lesson
+      REDIS_URL: redis://cache:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: learner
+      POSTGRES_DB: lesson
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U learner -d lesson"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  cache:
+    image: redis:7-alpine
+    # Redis is intentionally disposable in this lesson; only PostgreSQL persists.
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pg-data:

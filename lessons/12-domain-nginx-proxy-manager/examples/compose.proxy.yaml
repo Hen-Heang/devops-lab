@@ -1,0 +1,13 @@
+services:
+  api:
+    networks:
+      proxy-net:
+        aliases: [lesson-api]
+  frontend:
+    networks:
+      proxy-net:
+        aliases: [lesson-frontend]
+networks:
+  proxy-net:
+    name: devops-proxy
+    external: true

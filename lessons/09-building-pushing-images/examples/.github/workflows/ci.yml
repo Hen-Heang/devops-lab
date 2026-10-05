@@ -1,0 +1,180 @@
+name: CI and GHCR Publishing
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Lint source
+        run: npm run lint
+      - name: Check formatting
+        run: npm run format:check
+
+  test:
+    name: Test + Coverage (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Test with coverage thresholds
+        run: npm run coverage
+      - name: Save coverage report
+        if: ${{ always() && matrix.node == '24' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-node-24
+          path: coverage/
+          if-no-files-found: warn
+          retention-days: 7
+
+  build:
+    name: Build Verification
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Build the runtime image
+        run: docker build -t cicd-express-demo:ci .
+      - name: Verify packaged API
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker logs ci-api; docker rm -f ci-api >/dev/null' EXIT
+          docker run -d --name ci-api -p 127.0.0.1:3000:3000 cicd-express-demo:ci
+          curl --fail --silent --show-error --retry 15 --retry-connrefused --retry-delay 1 \
+            http://127.0.0.1:3000/health > health.json
+          docker exec ci-api node -e "if (process.getuid() === 0) process.exit(1)"
+          docker exec ci-api node -e "fetch('http://127.0.0.1:3000/health').then(async r => { const body = await r.json(); if (!r.ok || body.status !== 'ok') process.exit(1); }).catch(() => process.exit(1))"
+
+  quality-gate:
+    name: Quality Gate
+    needs: [lint, test, build]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require successful prerequisites
+        env:
+          LINT_RESULT: ${{ needs.lint.result }}
+          TEST_RESULT: ${{ needs.test.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        shell: bash
+        run: |
+          for result in "$LINT_RESULT" "$TEST_RESULT" "$BUILD_RESULT"; do
+            if [ "$result" != "success" ]; then
+              echo "Quality gate blocked: prerequisite result is $result"
+              exit 1
+            fi
+          done
+          echo "All required gates passed"
+
+  publish:
+    name: Publish and Verify GHCR Image
+    needs: [quality-gate]
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_ref: ${{ steps.reference.outputs.image_ref }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Validate stable release tag
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+      - name: Lowercase image path
+        id: image
+        env:
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: printf 'name=ghcr.io/%s\n' "${REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v4.4.1
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-action@v6.2.0
+        id: meta
+        with:
+          images: ${{ steps.image.outputs.name }}
+          flavor: latest=false
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=sha,prefix=sha-,format=long
+            type=semver,pattern={{version}},prefix=v
+            type=semver,pattern={{major}}.{{minor}},prefix=v
+      - uses: docker/build-push-action@v7.4.0
+        id: push
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=cicd-api
+          cache-to: type=gha,mode=max,scope=cicd-api
+      - name: Pull and verify the published digest
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          reference="$IMAGE_NAME@$IMAGE_DIGEST"
+          docker pull "$reference"
+          trap 'docker logs published-api; docker rm -f published-api >/dev/null' EXIT
+          docker run -d --name published-api -p 127.0.0.1:3000:3000 "$reference"
+          curl --fail --silent --show-error --retry 15 --retry-connrefused --retry-delay 1 http://127.0.0.1:3000/health >/dev/null
+          docker exec published-api node -e "fetch('http://127.0.0.1:3000/health').then(async r => { const b = await r.json(); if (!r.ok || b.status !== 'ok') process.exit(1); }).catch(() => process.exit(1))"
+      - name: Record verified deployment reference
+        id: reference
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
+        shell: bash
+        run: |
+          printf 'image_ref=%s@%s\n' "$IMAGE_NAME" "$IMAGE_DIGEST" >> "$GITHUB_OUTPUT"
+          printf 'Verified image: `%s@%s`\n' "$IMAGE_NAME" "$IMAGE_DIGEST" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,26 @@
+name: devops-deployment-demo
+services:
+  api:
+    networks: [app-net]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(async r => { const b = await r.json(); process.exit(r.ok && b.status === 'ok' ? 0 : 1); }).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+  frontend:
+    image: nginx:1.28-alpine
+    networks: [app-net]
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./frontend.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  app-net:

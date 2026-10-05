@@ -1,0 +1,29 @@
+# Linux Docker Engine VPS only; this grants host-observation privileges.
+services:
+  prometheus:
+    volumes:
+      - ./prometheus/prometheus.host.yml:/etc/prometheus/prometheus.yml:ro
+
+  node-exporter:
+    image: prom/node-exporter:v1.12.1
+    pid: host
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave
+    networks: [monitoring]
+
+  cadvisor:
+    image: ghcr.io/google/cadvisor:0.60.6
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    networks: [monitoring]

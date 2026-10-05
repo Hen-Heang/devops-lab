@@ -85,7 +85,7 @@ Use these skills in WSL, containers, CI runners, remote Linux servers, and incid
 - Find running processes and listening ports.
 - Inspect HTTP status, headers, and body.
 - Write a small, non-destructive shell script that checks an application URL and exits non-zero when the check fails.
-- Practise Git branch, diff, log, restore, and pull-request concepts.
+- Practise Git branch, diff, log, restore, and pull-request concepts with [Git Fundamentals](lessons/02-git-fundamentals/README.md) and [Git Advanced & Branching Strategies](lessons/03-git-advanced-branching/README.md).
 
 ### Exit gate
 
@@ -119,6 +119,8 @@ Use Docker in local development, integration tests, CI, and container-based depl
 5. Run PostgreSQL with a named volume.
 6. Rebuild one image using a multi-stage Dockerfile.
 
+Use the course guides for [Docker Fundamentals](lessons/04-docker-fundamentals/README.md) and [Dockerfile & Image Building](lessons/05-dockerfile-image-building/README.md) alongside these labs.
+
 Keep the [Docker CLI reference](docs/DOCKER-CLI-REFERENCE.md) open while you work through the commands.
 
 ### Exit gate
@@ -143,6 +145,8 @@ A real full-stack system contains several processes that need repeatable configu
 ### When
 
 Use Compose for local integration, demos, test dependencies, and simple single-host deployments.
+
+Start with the [Docker Compose lesson](lessons/06-docker-compose/README.md) and its smaller Nginx/Node/PostgreSQL/Redis example. Then adapt the concepts to the Java/Next.js stack below.
 
 ### Build
 
@@ -181,6 +185,8 @@ Run validation automatically for every pull request.
 
 A review should have repeatable evidence that code compiles, tests pass, and artifacts can be built.
 
+Start with [Introduction to CI/CD](lessons/07-introduction-cicd/README.md) and its Express starter, then [CI Workflows](lessons/08-ci-workflows/README.md) for parallel jobs, coverage, packaging checks, and a final gate. Adapt those checks to your Java/Next.js project after verifying the smaller example.
+
 ### When
 
 Add CI after each project already has reliable local validation commands.
@@ -216,6 +222,8 @@ A simple VM teaches processes, files, firewalls, DNS, certificates, backups, and
 ### When
 
 Start after Docker Compose and CI are comfortable.
+
+Follow prepared [lessons 09–14](lessons/README.md), then complete the [deployment workshop](lessons/deployment-workshop/README.md).
 
 ### Learn
 
@@ -254,6 +262,8 @@ Running is a process state, not proof that an application is correct or useful t
 ### When
 
 Observability begins during development and becomes essential during deployment and incidents.
+
+Start with the [Prometheus and Grafana lesson](lessons/15-prometheus-grafana/README.md) and its complete API monitoring example.
 
 ### Learning order
 

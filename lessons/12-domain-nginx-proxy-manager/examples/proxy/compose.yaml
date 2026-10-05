@@ -1,0 +1,20 @@
+name: devops-proxy
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:2.16.0
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      # Admin access through a trusted SSH tunnel, never a public admin listener.
+      - "127.0.0.1:8181:81"
+    volumes:
+      - npm-data:/data
+      - npm-letsencrypt:/etc/letsencrypt
+    networks: [proxy-net]
+networks:
+  proxy-net:
+    name: devops-proxy
+volumes:
+  npm-data:
+  npm-letsencrypt:
